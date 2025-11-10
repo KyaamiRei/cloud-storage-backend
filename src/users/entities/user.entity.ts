@@ -1,32 +1,20 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  CreateDateColumn,
-} from 'typeorm';
-import { File } from '../../files/entities/file.entity';
+import { FileEntity } from 'src/files/entities/file.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
-export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+@Entity('users')
+export class UserEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column({ unique: true })
+  @Column()
   email: string;
 
   @Column()
-  passwordHash: string;
+  password: string;
 
-  @Column({ default: 1073741824 }) // 1GB в байтах
-  storageLimit: number;
+  @Column()
+  fullName: string;
 
-  @Column({ default: 0 })
-  usedStorage: number;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @OneToMany(() => File, (file) => file.user)
-  files: File[];
+  @OneToMany(() => FileEntity, (file) => file.user)
+  files: FileEntity[];
 }

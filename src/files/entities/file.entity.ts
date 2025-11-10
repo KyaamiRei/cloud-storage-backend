@@ -1,46 +1,41 @@
+import { UserEntity } from 'src/users/entities/user.entity';
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
+  DeleteDateColumn,
+  Entity,
   ManyToOne,
-  CreateDateColumn,
+  PrimaryGeneratedColumn,
   JoinColumn,
+  CreateDateColumn,
 } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
 
-@Entity()
-export class File {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column()
-  name: string;
+@Entity('files')
+export class FileEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
-  path: string;
+  filename: string;
+
+  @Column()
+  originalname: string;
 
   @Column()
   size: number;
 
-  @Column({ nullable: true })
-  mimeType: string;
-
-  @Column({ default: false })
-  isFolder: boolean;
-
-  @Column({ nullable: true })
-  parentId: string;
-
-  @ManyToOne(() => File, { nullable: true })
-  @JoinColumn({ name: 'parentId' })
-  parent: File;
-
-  @ManyToOne(() => User, (user) => user.files)
-  user: User;
+  @Column()
+  mimetype: string;
 
   @Column()
-  userId: string;
+  userId: number;
+
+  @ManyToOne(() => UserEntity, (user) => user.files)
+  @JoinColumn({ name: 'userId' })
+  user: UserEntity;
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }

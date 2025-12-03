@@ -9,6 +9,11 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 
+export enum FileType {
+  PHOTOS = 'photo',
+  TRASH = 'trash',
+}
+
 @Entity('files')
 export class FileEntity {
   @PrimaryGeneratedColumn()

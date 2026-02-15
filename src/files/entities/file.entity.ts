@@ -12,6 +12,7 @@ import {
 export enum FileType {
   PHOTOS = 'photo',
   TRASH = 'trash',
+  FAVORITES = 'favorites',
 }
 
 @Entity('files')
@@ -43,4 +44,7 @@ export class FileEntity {
 
   @DeleteDateColumn()
   deletedAt?: Date;
+
+  @Column({ default: false })
+  isFavorite: boolean;
 }

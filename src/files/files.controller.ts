@@ -10,6 +10,8 @@ import {
   UseGuards,
   Query,
   Delete,
+  Patch,
+  Param,
 } from '@nestjs/common';
 import { FilesService } from './files.service';
 import {
@@ -33,8 +35,8 @@ export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @Get()
-  findAll(@UserId() userId: number, @Query('type') fileType: FileType) {
-    return this.filesService.findAll(userId, fileType);
+  findAll(@UserId() userId: number, @Query('type') fileType?: FileType | string) {
+    return this.filesService.findAll(userId, fileType as FileType);
   }
 
   @Post()
@@ -71,7 +73,26 @@ export class FilesController {
   }
 
   @Delete()
+  @ApiOperation({ summary: 'Удалить файлы в корзину (soft delete)' })
   remove(@UserId() userId: string, @Query('ids') ids: string) {
     return this.filesService.remove(userId, ids);
+  }
+
+  @Patch('restore')
+  @ApiOperation({ summary: 'Восстановить файлы из корзины' })
+  restore(@UserId() userId: string, @Query('ids') ids: string) {
+    return this.filesService.restore(userId, ids);
+  }
+
+  @Patch(':id/favorite')
+  @ApiOperation({ summary: 'Переключить статус избранного для файла' })
+  toggleFavorite(@UserId() userId: number, @Param('id') id: number) {
+    return this.filesService.toggleFavorite(userId, id);
+  }
+
+  @Get('favorites')
+  @ApiOperation({ summary: 'Получить все избранные файлы' })
+  getFavorites(@UserId() userId: number) {
+    return this.filesService.getFavorites(userId);
   }
 }
